@@ -14,10 +14,3 @@ source .venv/bin/activate
 ```
 gunicorn main:app
 ```
-
-## Run React UI app
-
-```
-yarn install
-yarn start
-```
