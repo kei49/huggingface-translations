@@ -1,52 +1,39 @@
-from enum import Enum, auto
 import torch
 
-from python.models.opus_mt_ko_en import OpusMtKoEn
-from python.models.opus_mt_mul_en import OpusMtMulEn
 from python.models.mbert_large_50 import MBartLargeManyToMany
-# from python.models.mbert_large_cc25 import MbertLargeCC25
+from python.exceptions import InvalidLanguagesError
+from .model_configs import ModelType, get_translator_config
+from .auto_translator import AutoTranslator
 
 
-class ModelType(Enum):
-    OPUS_MT_KO_EN = auto()
-    OPUS_MT_MUL_EN = auto()
-    MBART_LARGE_MANY_TO_MANY = auto()
-
-
-class Translators():
+class Translator():
     supported_la = ["en", "es", "fr", "it", "ja",
                     "ko", "ru", "vi", "zh", "id", "pl", "th"]
     use_gpu = torch.cuda.is_available()
 
     def __init__(self, model_type: ModelType) -> None:
+        self.model_config = get_translator_config(model_type)
         self.model_type = model_type
         self._load_model()
 
     def _load_model(self) -> None:
         print("loading model")
-        match self.model_type:
-            case ModelType.OPUS_MT_KO_EN:
-                self.model = OpusMtKoEn()
-            case ModelType.MBART_LARGE_MANY_TO_MANY:
-                self.model = MBartLargeManyToMany(use_gpu=self.use_gpu)
-            case ModelType.OPUS_MT_MUL_EN:
-                self.model = OpusMtMulEn()
-            case _:
-                pass
-
-    def set_languages(self, from_la: str, to_la: str) -> None:
-        if self.model and from_la in self.supported_la and to_la in self.supported_la:
-            match self.model_type:
-                case ModelType.OPUS_MT_KO_EN:
-                    pass
-                case ModelType.MBART_LARGE_MANY_TO_MANY:
-                    self.model.set_languages(from_la, to_la)
-                case ModelType.OPUS_MT_MUL_EN:
-                    self.model.set_languages(from_la, to_la)
-                case _:
-                    pass
+        if self.model_type == ModelType.MBART_LARGE_MANY_TO_MANY and self.use_gpu:
+            self.model = MBartLargeManyToMany(use_gpu=self.use_gpu)
         else:
-            raise Exception("failed to load models: please check languages")
+            self.model = AutoTranslator(self.model_config)
+
+    def set_languages(self, src_code: str, tgt_code: str) -> None:
+        if self.model and src_code in self.supported_la and tgt_code in self.supported_la:
+            if len(self.model.config.available_src_langs) == 1:
+                src_code = None
+
+            if len(self.model.config.available_tgt_langs) == 1:
+                tgt_code = None
+
+            self.model.set_languages(src_code, tgt_code)
+        else:
+            raise InvalidLanguagesError("Failed to set_languages")
 
     def inference(self, texts) -> str:
         if self.model:

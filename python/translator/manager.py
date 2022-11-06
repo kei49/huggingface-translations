@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Dict
 
-from .translator import Translators, ModelType
+from .translator import Translator, ModelType
 
 
 @dataclass
@@ -12,7 +12,7 @@ class TranslateParams:
 
 
 class Manager():
-    loaded_models: Dict[str, Translators] = {}
+    loaded_models: Dict[str, Translator] = {}
 
     initial_models = [
         TranslateParams(ModelType.OPUS_MT_KO_EN, "ko", "en"),
@@ -30,7 +30,7 @@ class Manager():
         for model in self.initial_models:
             self._load_model(model)
 
-    def get_model(self, p: TranslateParams) -> Translators:
+    def get_model(self, p: TranslateParams) -> Translator:
         model_id = self._get_model_id(p)
 
         if not model_id in self.loaded_models:
@@ -38,8 +38,8 @@ class Manager():
 
         return self.loaded_models[model_id]
 
-    def _load_model(self, p: TranslateParams) -> Translators:
-        model = Translators(p.model_type)
+    def _load_model(self, p: TranslateParams) -> Translator:
+        model = Translator(p.model_type)
         model.set_languages(p.from_la, p.to_la)
         model_id = self._get_model_id(p)
         self._set_model(model_id, model)
