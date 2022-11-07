@@ -15,9 +15,10 @@ class Manager():
     loaded_models: Dict[str, Translator] = {}
 
     initial_models = [
-        TranslateParams(ModelType.OPUS_MT_KO_EN, "ko", "en"),
-        TranslateParams(ModelType.OPUS_MT_MUL_EN, "ja", "en"),
-        TranslateParams(ModelType.OPUS_MT_MUL_EN, "vi", "en"),
+        # TranslateParams(ModelType.OPUS_MT_KO_EN, "ko", "en"),
+        # TranslateParams(ModelType.OPUS_MT_MUL_EN, "ja", "en"),
+        # TranslateParams(ModelType.OPUS_MT_MUL_EN, "vi", "en"),
+        # TranslateParams(ModelType.MT5_SMALL, "en", "ja")
         # TranslateParams(ModelType.OPUS_MT_MUL_EN, "zh", "en"),
         # TranslateParams(ModelType.OPUS_MT_MUL_EN, "id", "en"),
         # TranslateParams(ModelType.OPUS_MT_MUL_EN, "th", "en"),
@@ -36,11 +37,14 @@ class Manager():
         if not model_id in self.loaded_models:
             self._load_model(p)
 
+        print(f"Model: {model_id=}")
+
         return self.loaded_models[model_id]
 
     def _load_model(self, p: TranslateParams) -> Translator:
         model = Translator(p.model_type)
         model.set_languages(p.from_la, p.to_la)
+
         model_id = self._get_model_id(p)
         self._set_model(model_id, model)
 
