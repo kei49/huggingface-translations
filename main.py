@@ -44,10 +44,9 @@ def translate(req: TranslateRequestParams):
 
     if req.from_la == "ko" and req.to_la == "en":
         t_p = TranslateParams(ModelType.OPUS_MT_KO_EN, req.from_la, req.to_la)
-    elif req.from_la == "vi" or req.to_la == "vi":
-        # t_p = TranslateParams(ModelType.ENVIT5_TRANSLATION,
-        #                       req.from_la, req.to_la, accept_none_languages=True)
-        pass
+    elif (req.from_la == "vi" and req.to_la == "en") or (req.from_la == "en" and req.to_la == "vi"):
+        t_p = TranslateParams(ModelType.ENVIT5_TRANSLATION,
+                              req.from_la, req.to_la)
     elif req.from_la == "en" and req.to_la == "ja":
         t_p = TranslateParams(ModelType.OPUS_MT_EN_JAP, req.from_la, req.to_la)
         # t_p = TranslateParams(ModelType.MT5_BASE, req.from_la, req.to_la)
@@ -61,9 +60,13 @@ def translate(req: TranslateRequestParams):
             ModelType.MBART_LARGE_MANY_TO_MANY, req.from_la, req.to_la)
 
     print(f"{t_p=}")
-    translator = manager.get_model(t_p)
+    try:
+        translator = manager.get_model(t_p)
 
-    outputs = translator.inference(req.texts)
+        outputs = translator.inference(req.texts)
+    except Exception as e:
+        print(e)
+
     return outputs
 
 

@@ -25,6 +25,9 @@ class AutoTranslator():
                 config.model_path)
 
     def set_languages(self, src_code: str = None, tgt_code: str = None) -> None:
+        if src_code == None and tgt_code == None:
+            pass
+
         if src_code != None:
             langs = [la for la in self.config.available_src_langs if src_code in la]
             if len(langs) == 0:

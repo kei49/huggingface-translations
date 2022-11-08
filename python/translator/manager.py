@@ -15,7 +15,9 @@ class Manager():
     loaded_models: Dict[str, Translator] = {}
 
     initial_models = [
-        # TranslateParams(ModelType.OPUS_MT_KO_EN, "ko", "en"),
+        TranslateParams(ModelType.OPUS_MT_KO_EN, "ko", "en"),
+        TranslateParams(ModelType.ENVIT5_TRANSLATION, "en", "vi"),
+        TranslateParams(ModelType.ENVIT5_TRANSLATION, "vi", "en"),
         # TranslateParams(ModelType.OPUS_MT_MUL_EN, "ja", "en"),
         # TranslateParams(ModelType.OPUS_MT_MUL_EN, "vi", "en"),
         # TranslateParams(ModelType.MT5_SMALL, "en", "ja")

@@ -1,9 +1,11 @@
 import torch
+from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
 from python.models.mbert_large_50 import MBartLargeManyToMany
 from python.exceptions import InvalidLanguagesError
 from .model_configs import ModelType, get_translator_config
 from .auto_translator import AutoTranslator
+from .envit5_translation import Envit5Translation
 
 
 class Translator():
@@ -20,10 +22,16 @@ class Translator():
         print("loading model")
         if self.model_type == ModelType.MBART_LARGE_MANY_TO_MANY and self.use_gpu:
             self.model = MBartLargeManyToMany(use_gpu=self.use_gpu)
+        elif self.model_type == ModelType.ENVIT5_TRANSLATION:
+            self.model = Envit5Translation(self.model_config)
         else:
             self.model = AutoTranslator(self.model_config)
 
     def set_languages(self, src_code: str, tgt_code: str) -> None:
+        if self.model_type == ModelType.ENVIT5_TRANSLATION:
+            self.model.set_tokenizer(src_code)
+            return
+
         if self.model and src_code in self.supported_la and tgt_code in self.supported_la:
             if len(self.model.config.available_src_langs) == 1:
                 src_code = None
