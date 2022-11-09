@@ -13,6 +13,8 @@ class ModelType(Enum):
     SMALL100 = auto()
     M2M100_418M = auto()
 
+    FLAN_T5_BASE = auto()
+
     MT5_SMALL = auto()
     MT5_BASE = auto()
     # MT5_LARGE = auto()
@@ -63,6 +65,10 @@ mbart_available_languages_without_en = [
 
 mt5_tmp_availabel_languages = [
     'en', 'ja', 'zh', 'vi', 'ko', 'id'
+]
+
+flan_t5_languages = [
+    "English", "Spanish", "Japanese", "Persian", "Hindi", "French", "Chinese", "Bengali", "Gujarati", "German", "Telugu", "Italian", "Arabic", "Polish", "Tamil", "Marathi", "Malayalam", "Oriya", "Panjabi", "Portuguese", "Urdu", "Galician", "Hebrew", "Korean", "Catalan", "Thai", "Dutch", "Indonesian", "Vietnamese", "Bulgarian", "Filipino", "CentralKhmer", "Lao", "Turkish", "Russian", "Croatian", "Swedish", "Yoruba", "Kurdish", "Burmese", "Malay", "Czech", "Finnish", "Somali", "Tagalog", "Swahili", "Sinhala", "Kannada", "Zhuang", "Igbo", "Xhosa", "Romanian", "Haitian", "Estonian", "Slovak", "Lithuanian", "Greek", "Nepali", "Assamese", "Norwegian"
 ]
 
 models = {
@@ -148,6 +154,11 @@ models = {
         'name': 'facebook/m2m100_418M',
         'available_src_langs': fairseq_available_languages,
         'available_tgt_langs': fairseq_available_languages
+    },
+    ModelType.FLAN_T5_BASE: {
+        'name': 'google/flan-t5-base',
+        'available_src_langs': flan_t5_languages,
+        'available_tgt_langs': flan_t5_languages
     }
 }
 
