@@ -2,7 +2,7 @@ from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
 from python.exceptions import InvalidLanguagesError
 from python.helpers import get_directory, check_path_exists
-from .model_configs import TranslatorConfig
+from python.translator.model_configs import TranslatorConfig
 
 
 class AutoTranslator():

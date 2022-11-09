@@ -2,11 +2,11 @@ import torch
 
 from python.exceptions import InvalidLanguagesError
 from .model_configs import ModelType, get_translator_config
-from .auto_translator import AutoTranslator
-from .envit5_translation import Envit5Translation
-from .k024_mt5_zh_ja_en_trimmed import K024_MT5_ZH_JA_EN_TRIMMED
-from .ken11_mbart_ja_en import KEN11_MBART_JA_EN
-from .mbart_large_50_base import MBartLarge50Base
+from .models.auto_translator import AutoTranslator
+from .models.envit5_translation import Envit5Translation
+from .models.k024_mt5_zh_ja_en_trimmed import K024_MT5_ZH_JA_EN_TRIMMED
+from .models.ken11_mbart_ja_en import KEN11_MBART_JA_EN
+from .models.mbart_large_50_base import MBartLarge50Base
 
 
 class Translator():

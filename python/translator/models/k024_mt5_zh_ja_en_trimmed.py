@@ -1,5 +1,5 @@
 from python.helpers import get_directory, check_path_exists
-from .model_configs import TranslatorConfig
+from python.translator.model_configs import TranslatorConfig
 
 
 from python.helpers import check_path_exists, get_directory

@@ -2,8 +2,8 @@ from transformers import MBart50TokenizerFast, MBartForConditionalGeneration
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
 
-from ..helpers import get_directory, check_path_exists
-from .model_configs import TranslatorConfig
+from python.helpers import get_directory, check_path_exists
+from python.translator.model_configs import TranslatorConfig
 
 
 class MBartLarge50Base():

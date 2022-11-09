@@ -4,7 +4,7 @@ from transformers import (
 
 
 from python.helpers import get_directory, check_path_exists
-from .model_configs import TranslatorConfig
+from python.translator.model_configs import TranslatorConfig
 
 
 class KEN11_MBART_JA_EN():
