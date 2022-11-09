@@ -8,6 +8,7 @@ from .models.k024_mt5_zh_ja_en_trimmed import K024_MT5_ZH_JA_EN_TRIMMED
 from .models.ken11_mbart_ja_en import KEN11_MBART_JA_EN
 from .models.mbart_large_50_base import MBartLarge50Base
 from .models.small100 import SMALL100
+from .models.m2m100_418m import M2M100_418M
 
 
 class Translator():
@@ -32,6 +33,8 @@ class Translator():
                 self.model = K024_MT5_ZH_JA_EN_TRIMMED(self.model_config)
             case ModelType.KEN11_MBART_JA_EN:
                 self.model = KEN11_MBART_JA_EN(self.model_config)
+            case ModelType.M2M100_418M:
+                self.model = M2M100_418M(self.model_config)
             case ModelType.SMALL100:
                 self.model = SMALL100(self.model_config)
             case _:
@@ -44,7 +47,7 @@ class Translator():
         elif self.model_type == ModelType.KEN11_MBART_JA_EN:
             self.model.set_tokenizer()
             return
-        elif self.model_type == ModelType.SMALL100:
+        elif self.model_type == ModelType.SMALL100 or self.model_type == ModelType.M2M100_418M:
             self.model.set_tokenizer(tgt_code)
             return
         elif self.model_type != ModelType.MBART_LARGE_50_MANY_TO_ONE and self.model_type != ModelType.MBART_LARGE_50_ONE_TO_MANY:

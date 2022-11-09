@@ -11,6 +11,7 @@ class ModelType(Enum):
     MBART_LARGE_50_MANY_TO_ONE = auto()
 
     SMALL100 = auto()
+    M2M100_418M = auto()
 
     MT5_SMALL = auto()
     MT5_BASE = auto()
@@ -140,6 +141,11 @@ models = {
     },
     ModelType.SMALL100: {
         'name': 'alirezamsh/small100',
+        'available_src_langs': fairseq_available_languages,
+        'available_tgt_langs': fairseq_available_languages
+    },
+    ModelType.M2M100_418M: {
+        'name': 'facebook/m2m100_418M',
         'available_src_langs': fairseq_available_languages,
         'available_tgt_langs': fairseq_available_languages
     }
