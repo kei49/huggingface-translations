@@ -6,20 +6,24 @@ from python.helpers import get_directory
 
 
 class ModelType(Enum):
-    ENVIT5_TRANSLATION = auto()
     MBART_LARGE_50_MANY_TO_MANY = auto()
     MBART_LARGE_50_ONE_TO_MANY = auto()
     MBART_LARGE_50_MANY_TO_ONE = auto()
 
+    SMALL100 = auto()
+
     MT5_SMALL = auto()
     MT5_BASE = auto()
     # MT5_LARGE = auto()
+
+    ENVIT5_TRANSLATION = auto()
     K024_MT5_ZH_JA_EN_TRIMMED = auto()
     KEN11_MBART_JA_EN = auto()
 
     OPUS_MT_JA_EN = auto()
     OPUS_MT_EN_JAP = auto()
     OPUS_MT_KO_EN = auto()
+    OPUS_MT_TC_BIG_EN_KO = auto()
     OPUS_MT_MUL_EN = auto()
 
 
@@ -50,6 +54,9 @@ mbart_available_languages = [
     "pt_XX", "sv_SE", "sw_KE", "ta_IN", "te_IN", "th_TH", "tl_XX", "uk_UA",
     "ur_PK", "xh_ZA", "gl_ES", "sl_SI"]
 
+fairseq_available_languages = ["af", "am", "ar", "ast", "az", "ba", "be", "bg", "bn", "br", "bs", "ca", "ceb", "cs", "cy", "da", "de", "el", "en", "es", "et", "fa", "ff", "fi", "fr", "fy", "ga", "gd", "gl", "gu", "ha", "he", "hi", "hr", "ht", "hu", "hy", "id", "ig", "ilo", "is", "it", "ja", "jv", "ka", "kk", "km",
+                               "kn", "ko", "lb", "lg", "ln", "lo", "lt", "lv", "mg", "mk", "ml", "mn", "mr", "ms", "my", "ne", "nl", "no", "ns", "oc", "or", "pa", "pl", "ps", "pt", "ro", "ru", "sd", "si", "sk", "sl", "so", "sq", "sr", "ss", "su", "sv", "sw", "ta", "th", "tl", "tn", "tr", "uk", "ur", "uz", "vi", "wo", "xh", "yi", "yo", "zh", "zu"]
+
 mbart_available_languages_without_en = [
     la for la in mbart_available_languages if la != "en_XX"]
 
@@ -73,6 +80,11 @@ models = {
         'name': 'Helsinki-NLP/opus-mt-ko-en',
         'available_src_langs': ['ko'],
         'available_tgt_langs': ['en']
+    },
+    ModelType.OPUS_MT_TC_BIG_EN_KO: {
+        'name': 'Helsinki-NLP/opus-mt-tc-big-en-ko',
+        'available_src_langs': ['en'],
+        'available_tgt_langs': ['ko']
     },
     ModelType.OPUS_MT_MUL_EN: {
         'name': 'Helsinki-NLP/opus-mt-mul-en',
@@ -125,6 +137,11 @@ models = {
         'name': 'ken11/mbart-ja-en',
         'available_src_langs': ['ja'],
         'available_tgt_langs': ['en']
+    },
+    ModelType.SMALL100: {
+        'name': 'alirezamsh/small100',
+        'available_src_langs': fairseq_available_languages,
+        'available_tgt_langs': fairseq_available_languages
     }
 }
 
