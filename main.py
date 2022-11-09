@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from python.translator.manager import Manager, ModelType, TranslateParams
+from python.timer import Timer
 
 
 app = FastAPI()
@@ -61,13 +62,17 @@ def translate(req: TranslateRequestParams):
 
     print(f"{t_p=}")
     try:
-        translator = manager.get_model(t_p)
+        with Timer() as t:
+            translator = manager.get_model(t_p)
 
-        outputs = translator.inference(req.texts)
+            outputs = translator.inference(req.texts)
+
+        outputs_with_time = f"{outputs} (elapsed_time: {t.elapsed_time})"
+
     except Exception as e:
         print(e)
 
-    return outputs
+    return outputs_with_time
 
 
 def run_only_once() -> None:
