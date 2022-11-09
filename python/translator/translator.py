@@ -24,7 +24,6 @@ class Translator():
         match self.model_type:
             case ModelType.MBART_LARGE_50_MANY_TO_MANY | ModelType.MBART_LARGE_50_ONE_TO_MANY | ModelType.MBART_LARGE_50_MANY_TO_ONE:
                 self.model_config.use_gpu = self.use_gpu
-                print("mode: ", self.model_config)
                 self.model = MBartLarge50Base(self.model_config)
             case ModelType.ENVIT5_TRANSLATION:
                 self.model = Envit5Translation(self.model_config)
@@ -35,17 +34,6 @@ class Translator():
             case _:
                 self.model = AutoTranslator(self.model_config)
 
-        # if self.model_type == ModelType.MBART_LARGE_50_MANY_TO_MANY or:
-        #     self.model = MBartLarge50Base(use_gpu=self.use_gpu)
-        # elif self.model_type == ModelType.ENVIT5_TRANSLATION:
-        #     self.model = Envit5Translation(self.model_config)
-        # elif self.model_type == ModelType.K024_MT5_ZH_JA_EN_TRIMMED:
-        #     self.model = K024_MT5_ZH_JA_EN_TRIMMED(self.model_config)
-        # elif self.model_type == ModelType.KEN11_MBART_JA_EN:
-        #     self.model = KEN11_MBART_JA_EN(self.model_config)
-        # else:
-        #     self.model = AutoTranslator(self.model_config)
-
     def set_languages(self, src_code: str, tgt_code: str) -> None:
         if self.model_type == ModelType.ENVIT5_TRANSLATION:
             self.model.set_tokenizer(src_code)
@@ -53,14 +41,14 @@ class Translator():
         elif self.model_type == ModelType.KEN11_MBART_JA_EN:
             self.model.set_tokenizer()
             return
-
-        if self.model:
+        elif self.model_type != ModelType.MBART_LARGE_50_MANY_TO_ONE and self.model_type != ModelType.MBART_LARGE_50_ONE_TO_MANY:
             if len(self.model.config.available_src_langs) == 1:
                 src_code = None
 
             if len(self.model.config.available_tgt_langs) == 1:
                 tgt_code = None
 
+        if self.model:
             self.model.set_languages(src_code, tgt_code)
         else:
             raise InvalidLanguagesError("Failed to set_languages")

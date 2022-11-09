@@ -42,6 +42,8 @@ def health_check():
 
 @app.post("/translate/all")
 def translate_all(req: TranslateRequestParams):
+    print(f"{os.getpid()} worker is handling the request")
+
     available_models_t_p = get_all_available_models(req.from_la, req.to_la)
 
     print(f"{available_models_t_p=}")

@@ -50,6 +50,9 @@ mbart_available_languages = [
     "pt_XX", "sv_SE", "sw_KE", "ta_IN", "te_IN", "th_TH", "tl_XX", "uk_UA",
     "ur_PK", "xh_ZA", "gl_ES", "sl_SI"]
 
+mbart_available_languages_without_en = [
+    la for la in mbart_available_languages if la != "en_XX"]
+
 mt5_tmp_availabel_languages = [
     'en', 'ja', 'zh', 'vi', 'ko', 'id'
 ]
@@ -89,13 +92,13 @@ models = {
     },
     ModelType.MBART_LARGE_50_ONE_TO_MANY: {
         'name': 'facebook/mbart-large-50-one-to-many-mmt',
-        'available_src_langs': mbart_available_languages,
-        'available_tgt_langs': mbart_available_languages
+        'available_src_langs': ['en_XX'],
+        'available_tgt_langs': mbart_available_languages_without_en
     },
     ModelType.MBART_LARGE_50_MANY_TO_ONE: {
         'name': 'facebook/mbart-large-50-many-to-one-mmt',
-        'available_src_langs': mbart_available_languages,
-        'available_tgt_langs': mbart_available_languages
+        'available_src_langs': mbart_available_languages_without_en,
+        'available_tgt_langs': ['en_XX']
     },
     # ModelType.MT5_SMALL: {
     #     'name': 'google/mt5-small',

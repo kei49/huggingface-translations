@@ -13,9 +13,6 @@ class MBartLarge50Base():
     tokenizer: AutoTokenizer | MBart50TokenizerFast
     model: AutoModelForSeq2SeqLM | MBartForConditionalGeneration
 
-    # supported_locales = ["en_XX", "es_XX", "fr_XX", "it_IT", "ja_XX",
-    #                      "ko_KR", "ru_RU", "vi_VN", "zh_CN", "id_ID", "pl_PL", "th_TH"]
-
     def __init__(self, config: TranslatorConfig) -> None:
         self.config = config
 
@@ -40,6 +37,8 @@ class MBartLarge50Base():
                     config.model_path)
 
     def set_languages(self, src_lang: str, tgt_lang: str) -> None:
+        print(f"set_languages: {src_lang=}, {tgt_lang=}")
+
         if self.config.use_gpu:
             self.tokenizer = MBart50TokenizerFast.from_pretrained(
                 self.config.pretrained_name)
