@@ -77,12 +77,11 @@ models = {
         'available_src_langs': ['ja'],
         'available_tgt_langs': ['en']
     },
-    ModelType.OPUS_MT_EN_JAP: {
-        'name': 'Helsinki-NLP/opus-mt-en-jap',
-        'available_src_langs': ['en'],
-        'available_tgt_langs': ['jap']
-
-    },
+    # ModelType.OPUS_MT_EN_JAP: {
+    #     'name': 'Helsinki-NLP/opus-mt-en-jap',
+    #     'available_src_langs': ['en'],
+    #     'available_tgt_langs': ['jap']
+    # },
     ModelType.OPUS_MT_KO_EN: {
         'name': 'Helsinki-NLP/opus-mt-ko-en',
         'available_src_langs': ['ko'],
@@ -150,16 +149,16 @@ models = {
         'available_src_langs': fairseq_available_languages,
         'available_tgt_langs': fairseq_available_languages
     },
-    ModelType.M2M100_418M: {
-        'name': 'facebook/m2m100_418M',
-        'available_src_langs': fairseq_available_languages,
-        'available_tgt_langs': fairseq_available_languages
-    },
-    ModelType.FLAN_T5_BASE: {
-        'name': 'google/flan-t5-base',
-        'available_src_langs': flan_t5_languages,
-        'available_tgt_langs': flan_t5_languages
-    }
+    # ModelType.M2M100_418M: {
+    #     'name': 'facebook/m2m100_418M',
+    #     'available_src_langs': fairseq_available_languages,
+    #     'available_tgt_langs': fairseq_available_languages
+    # },
+    # ModelType.FLAN_T5_BASE: {
+    #     'name': 'google/flan-t5-base',
+    #     'available_src_langs': flan_t5_languages,
+    #     'available_tgt_langs': flan_t5_languages
+    # }
 }
 
 
