@@ -46,6 +46,8 @@ class AutoTranslator():
         if self.src_lang != None:
             self.tokenizer.src_lang = self.src_lang
 
+        print("CURRENT: TOKENIZER: ", self.tokenizer)
+
     def inference(self, inputs: str = None, max_new_tokens: int = 500, num_beams: int = 1):
         encoded = self.tokenizer(inputs, return_tensors="pt")
         forced_bos_token_id = self.tokenizer.lang_code_to_id[

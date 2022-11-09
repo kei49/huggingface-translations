@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
+from python.translator.model_configs import get_all_available_models
 from python.translator.manager import Manager, ModelType, TranslateParams
 from python.timer import Timer
 
@@ -37,6 +38,28 @@ manager = Manager()
 def health_check():
     print(f"{os.getpid()} worker is handling the request")
     return {"message": "Hello World"}
+
+
+@app.post("/translate/all")
+def translate_all(req: TranslateRequestParams):
+    available_models_t_p = get_all_available_models(req.from_la, req.to_la)
+
+    final_outputs = ""
+
+    for t_p in available_models_t_p:
+        try:
+            with Timer() as t:
+                translator = manager.get_model(t_p)
+                outputs = translator.inference(req.texts)
+
+            outputs = f"{outputs} ({t_p.model_type}: {t.elapsed_time} sec)"
+
+            final_outputs = f"{final_outputs}{outputs}\n"
+
+        except Exception as e:
+            print(e)
+
+    return final_outputs
 
 
 @app.post("/translate/")
