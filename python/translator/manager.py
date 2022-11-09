@@ -38,7 +38,8 @@ class Manager():
 
     def _load_model(self, p: TranslateParams) -> Translator:
         model = Translator(p.model_type)
-        model.set_languages(p.from_la, p.to_la)
+        model.set_languages((p.src_lang if p.src_lang else p.from_la),
+                            (p.tgt_lang if p.tgt_lang else p.to_la))
 
         model_id = self._get_model_id(p)
         self._set_model(model_id, model)

@@ -1,13 +1,16 @@
 from enum import Enum, auto
-from typing import Dict
-from dataclasses import dataclass
+from typing import Dict, Optional
+from dataclasses import dataclass, field
 
 from python.helpers import get_directory
 
 
 class ModelType(Enum):
     ENVIT5_TRANSLATION = auto()
-    MBART_LARGE_MANY_TO_MANY = auto()
+    MBART_LARGE_50_MANY_TO_MANY = auto()
+    MBART_LARGE_50_ONE_TO_MANY = auto()
+    MBART_LARGE_50_MANY_TO_ONE = auto()
+
     MT5_SMALL = auto()
     MT5_BASE = auto()
     # MT5_LARGE = auto()
@@ -26,6 +29,7 @@ class TranslatorConfig:
     model_path: str
     available_src_langs: list[str]
     available_tgt_langs: list[str]
+    use_gpu: bool = field(init=False)
 
 
 @dataclass
@@ -33,6 +37,8 @@ class TranslateParams:
     model_type: ModelType
     from_la: str
     to_la: str
+    src_lang: str = field(init=False)
+    tgt_lang: str = field(init=False)
 
 
 mbart_available_languages = [
@@ -76,8 +82,18 @@ models = {
                                 'jv', 'el', 'my', 'ba', 'it', 'hr', 'ur', 'ce', 'nn', 'fi', 'mg', 'rn', 'xh', 'ab', 'de', 'cs', 'he', 'zu', 'yi', 'ml', 'mul', 'en'],
         'available_tgt_langs': ['en']
     },
-    ModelType.MBART_LARGE_MANY_TO_MANY: {
+    ModelType.MBART_LARGE_50_MANY_TO_MANY: {
         'name': 'facebook/mbart-large-50-many-to-many-mmt',
+        'available_src_langs': mbart_available_languages,
+        'available_tgt_langs': mbart_available_languages
+    },
+    ModelType.MBART_LARGE_50_ONE_TO_MANY: {
+        'name': 'facebook/mbart-large-50-one-to-many-mmt',
+        'available_src_langs': mbart_available_languages,
+        'available_tgt_langs': mbart_available_languages
+    },
+    ModelType.MBART_LARGE_50_MANY_TO_ONE: {
+        'name': 'facebook/mbart-large-50-many-to-one-mmt',
         'available_src_langs': mbart_available_languages,
         'available_tgt_langs': mbart_available_languages
     },
@@ -120,17 +136,21 @@ def get_translator_config(model_type: ModelType):
     return generate_translator_config(models[model_type])
 
 
-def get_all_available_models(src_lang: str, tgt_lang: str):
+def get_all_available_models(from_la: str, to_la: str):
     available_models: list[TranslateParams] = []
 
     for model_type, value in models.items():
         src_langs = [
-            src_lang for lang in value['available_src_langs'] if src_lang in lang]
+            lang for lang in value['available_src_langs'] if from_la in lang]
         tgt_langs = [
-            tgt_lang for lang in value['available_tgt_langs'] if tgt_lang in lang]
+            lang for lang in value['available_tgt_langs'] if to_la in lang]
 
         if len(src_langs) > 0 and len(tgt_langs) > 0:
-            available_models.append(TranslateParams(
-                model_type, src_langs[0], tgt_langs[0]))
+            t_p = TranslateParams(
+                model_type, from_la, to_la)
+            t_p.src_lang = src_langs[0]
+            t_p.tgt_lang = tgt_langs[0]
+
+            available_models.append(t_p)
 
     return available_models

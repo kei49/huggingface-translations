@@ -44,6 +44,8 @@ def health_check():
 def translate_all(req: TranslateRequestParams):
     available_models_t_p = get_all_available_models(req.from_la, req.to_la)
 
+    print(f"{available_models_t_p=}")
+
     final_outputs = ""
 
     for t_p in available_models_t_p:
