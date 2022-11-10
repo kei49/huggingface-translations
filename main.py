@@ -6,6 +6,8 @@ from pydantic import BaseModel
 from python.translator.model_configs import get_all_available_models
 from python.translator.manager import Manager, ModelType, TranslateParams
 from python.timer import Timer
+from python.logger import use_logger
+logger = use_logger(__name__)
 
 
 app = FastAPI()
@@ -36,39 +38,46 @@ manager = Manager()
 
 @app.get("/")
 def health_check():
-    print(f"{os.getpid()} worker is handling the request")
+    logger.info(f"{os.getpid()} worker is handling the request")
     return {"message": "Hello World"}
 
 
 @app.post("/translate/all")
 def translate_all(req: TranslateRequestParams):
-    print(f"{os.getpid()} worker is handling the request")
+    logger.info(f"{os.getpid()} worker is handling the request")
 
     available_models_t_p = get_all_available_models(req.from_la, req.to_la)
 
-    print(f"{available_models_t_p=}")
+    logger.info(f"{available_models_t_p=}")
 
-    final_outputs = ""
+    all_outputs = []
 
     for t_p in available_models_t_p:
         try:
-            with Timer() as t:
+            with Timer(logger=logger.info) as t:
                 translator = manager.get_model(t_p)
                 outputs = translator.inference(req.texts)
 
             outputs = f"{outputs} ({t_p.model_type}: {t.elapsed_time} sec)"
 
-            final_outputs = f"{final_outputs}{outputs}\n"
+            all_outputs.append(outputs)
 
         except Exception as e:
-            print(e)
+            logger.exception(e)
+
+    final_outputs = ""
+
+    for i, outputs in enumerate(all_outputs):
+        logger.info(f"{i} | {outputs}")
+
+        final_outputs = f"{final_outputs}{outputs}\n"
 
     return final_outputs
 
 
 @app.post("/translate/")
 def translate(req: TranslateRequestParams):
-    print(f"{os.getpid()} worker is handling the request")
+    logger.info(f"{os.getpid()} worker is handling the request")
 
     if req.from_la == "ko" and req.to_la == "en":
         t_p = TranslateParams(ModelType.OPUS_MT_KO_EN, req.from_la, req.to_la)
@@ -85,11 +94,11 @@ def translate(req: TranslateRequestParams):
         t_p = TranslateParams(ModelType.OPUS_MT_MUL_EN, req.from_la, req.to_la)
     else:
         t_p = TranslateParams(
-            ModelType.MBART_LARGE_MANY_TO_MANY, req.from_la, req.to_la)
+            ModelType.MBART_LARGE_50_MANY_TO_MANY, req.from_la, req.to_la)
 
-    print(f"{t_p=}")
+    logger.debug(f"{t_p=}")
     try:
-        with Timer() as t:
+        with Timer(logger=logger.info) as t:
             translator = manager.get_model(t_p)
 
             outputs = translator.inference(req.texts)
@@ -97,13 +106,13 @@ def translate(req: TranslateRequestParams):
         outputs_with_time = f"{outputs} (elapsed_time: {t.elapsed_time})"
 
     except Exception as e:
-        print(e)
+        logger.exception(e)
 
     return outputs_with_time
 
 
 def run_only_once() -> None:
-    print("Application is ready now!")
+    logger.info("Application is ready now!")
 
 
 run_only_once()

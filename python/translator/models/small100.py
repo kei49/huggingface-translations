@@ -36,6 +36,4 @@ class SMALL100():
         outputs = self.tokenizer.batch_decode(
             generated_tokens, skip_special_tokens=True)[0]
 
-        print(outputs)
-
         return outputs

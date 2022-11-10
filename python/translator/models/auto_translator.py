@@ -3,6 +3,8 @@ from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 from python.exceptions import InvalidLanguagesError
 from python.helpers import get_directory, check_path_exists
 from python.translator.model_configs import TranslatorConfig
+from python.logger import use_logger
+logger = use_logger(__name__)
 
 
 class AutoTranslator():
@@ -46,7 +48,7 @@ class AutoTranslator():
         if self.src_lang != None:
             self.tokenizer.src_lang = self.src_lang
 
-        print("CURRENT: TOKENIZER: ", self.tokenizer)
+        logger.info(f"CURRENT: TOKENIZER: {self.tokenizer}")
 
     def inference(self, inputs: str = None, max_new_tokens: int = 500, num_beams: int = 1):
         encoded = self.tokenizer(inputs, return_tensors="pt")

@@ -4,6 +4,8 @@ from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
 from python.helpers import get_directory, check_path_exists
 from python.translator.model_configs import TranslatorConfig
+from python.logger import use_logger
+logger = use_logger(__name__)
 
 
 class MBartLarge50Base():
@@ -17,7 +19,7 @@ class MBartLarge50Base():
         self.config = config
 
         if config.use_gpu:
-            print(f"using gpu for {config.pretrained_name}")
+            logger.info(f"using gpu for {config.pretrained_name}")
 
         if not check_path_exists(config.model_path):
             if config.use_gpu:
@@ -37,8 +39,6 @@ class MBartLarge50Base():
                     config.model_path)
 
     def set_languages(self, src_lang: str, tgt_lang: str) -> None:
-        print(f"set_languages: {src_lang=}, {tgt_lang=}")
-
         if self.config.use_gpu:
             self.tokenizer = MBart50TokenizerFast.from_pretrained(
                 self.config.pretrained_name)
@@ -50,8 +50,6 @@ class MBartLarge50Base():
         self.tgt_lang = tgt_lang
 
     def inference(self, inputs: str = None, max_new_tokens: int = 500, num_beams: int = 1):
-        print("inferencing with", inputs, self.tokenizer, self.tgt_lang)
-
         encoded = self.tokenizer(inputs, return_tensors="pt")
         generated_tokens = self.model.generate(
             **encoded,
@@ -61,7 +59,5 @@ class MBartLarge50Base():
 
         outputs = self.tokenizer.batch_decode(
             generated_tokens, skip_special_tokens=True)[0]
-
-        print(outputs)
 
         return outputs

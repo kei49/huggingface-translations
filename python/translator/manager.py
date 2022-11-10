@@ -2,6 +2,8 @@ from typing import Dict
 
 from .translator import Translator, ModelType
 from .model_configs import TranslateParams
+from python.logger import use_logger
+logger = use_logger(__name__)
 
 
 class Manager():
@@ -32,7 +34,7 @@ class Manager():
         if not model_id in self.loaded_models:
             self._load_model(p)
 
-        print(f"Model: {model_id=}")
+        logger.info(f"Model: {model_id=}")
 
         return self.loaded_models[model_id]
 
@@ -44,7 +46,7 @@ class Manager():
         model_id = self._get_model_id(p)
         self._set_model(model_id, model)
 
-        print(f"Loaded {model_id=}")
+        logger.info(f"Newly loaded {model_id=}")
 
     def _set_model(self, model_id, model):
         self.loaded_models[model_id] = model

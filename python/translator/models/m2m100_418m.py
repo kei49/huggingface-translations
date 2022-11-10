@@ -36,6 +36,4 @@ class M2M100_418M():
         outputs = self.tokenizer.batch_decode(
             generated_tokens, skip_special_tokens=True)[0]
 
-        print(outputs)
-
         return outputs

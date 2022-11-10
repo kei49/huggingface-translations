@@ -47,6 +47,5 @@ class Envit5Translation():
             generated_tokens, skip_special_tokens=True)
 
         outputs = outputs[0][4:]
-        print(outputs)
 
         return outputs

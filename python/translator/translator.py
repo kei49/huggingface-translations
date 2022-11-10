@@ -9,6 +9,8 @@ from .models.ken11_mbart_ja_en import KEN11_MBART_JA_EN
 from .models.mbart_large_50_base import MBartLarge50Base
 from .models.small100 import SMALL100
 from .models.m2m100_418m import M2M100_418M
+from python.logger import use_logger
+logger = use_logger(__name__)
 
 
 class Translator():
@@ -22,7 +24,7 @@ class Translator():
         self._load_model()
 
     def _load_model(self) -> None:
-        print("loading model")
+        logger.info(f"loading model with {self.model_type=}")
         match self.model_type:
             case ModelType.MBART_LARGE_50_MANY_TO_MANY | ModelType.MBART_LARGE_50_ONE_TO_MANY | ModelType.MBART_LARGE_50_MANY_TO_ONE:
                 self.model_config.use_gpu = self.use_gpu
@@ -41,6 +43,8 @@ class Translator():
                 self.model = AutoTranslator(self.model_config)
 
     def set_languages(self, src_code: str, tgt_code: str) -> None:
+        logger.info(f"setting languages with {src_code=}, {tgt_code=}")
+
         if self.model_type == ModelType.ENVIT5_TRANSLATION:
             self.model.set_tokenizer(src_code)
             return
@@ -64,8 +68,8 @@ class Translator():
 
     def inference(self, texts) -> str:
         if self.model:
-            print("start to inference from: ", texts)
+            logger.info(f"start to inference from: {texts}")
             outputs = self.model.inference(texts)
-            print("get outputs: ", outputs)
+            logger.info(f"get outputs: {outputs}")
             return outputs
         return

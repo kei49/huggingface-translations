@@ -47,6 +47,4 @@ class K024_MT5_ZH_JA_EN_TRIMMED():
         res = pipe(sentence, max_length=512, num_beams=num_beams)
         outputs = res[0]['generated_text']
 
-        print(outputs)
-
         return outputs
