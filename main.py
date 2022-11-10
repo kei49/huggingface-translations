@@ -67,6 +67,11 @@ def translate_all(req: TranslateRequestParams):
 
     final_outputs = ""
 
+    logger.info("\n\n")
+
+    logger.info(
+        f"EVALUATE TRANSLATORS: {req.from_la} to {req.to_la} with {req.texts}")
+
     for i, outputs in enumerate(all_outputs):
         logger.info(f"{i} | {outputs}")
 
