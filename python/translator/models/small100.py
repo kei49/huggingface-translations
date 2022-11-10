@@ -32,7 +32,8 @@ class SMALL100():
 
     def inference(self, inputs: str = None, max_new_tokens: int = 500, num_beams: int = 1):
         inputs = self.tokenizer(inputs, return_tensors="pt")
-        generated_tokens = self.model.generate(**inputs)
+        generated_tokens = self.model.generate(**inputs,
+                                               max_new_tokens=max_new_tokens,)
         outputs = self.tokenizer.batch_decode(
             generated_tokens, skip_special_tokens=True)[0]
 
